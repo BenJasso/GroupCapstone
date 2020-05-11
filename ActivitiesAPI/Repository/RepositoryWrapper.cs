@@ -9,16 +9,16 @@ namespace Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private ApplicationDbContext _context;
-        private IActivityRepository _Activity;
-        public IActivityRepository Activity
+        private IActivityRepository _Activities;
+        public IActivityRepository Activities
         {
             get
             {
-                if(_Activity == null)
+                if(_Activities == null)
                 {
-                    _Activity = new ActivityRepository(_context);
+                    _Activities = new ActivityRepository(_context);
                 }
-                return _Activity;
+                return _Activities;
             }
         }
         public RepositoryWrapper(ApplicationDbContext context)

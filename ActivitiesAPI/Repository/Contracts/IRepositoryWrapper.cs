@@ -6,7 +6,7 @@ namespace Repository.Contracts
 {
     public interface IRepositoryWrapper
     {
-        public IActivityRepository Activity { get; }
+        public IActivityRepository Activities { get; }
         void Save();
     }
 }
