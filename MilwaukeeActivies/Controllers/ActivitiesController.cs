@@ -4,36 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Contracts;
 
-namespace ActivitiesAPI.Controllers
+namespace MilwaukeeActivies.Controllers
 {
-
-
-    [Route("api/activities")]
-    [ApiController]
     public class ActivitiesController : Controller
     {
-
-        private IRepositoryWrapper _repo;
-        public ActivitiesController(IRepositoryWrapper repo)
-        {
-            _repo = repo;
-        }
-
         // GET: Activities
-        [HttpGet]
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            var activities = _repo.Activities.GetAllActivities();
-            return Ok(activities);
+            return View();
         }
 
         // GET: Activities/Details/5
         public ActionResult Details(int id)
         {
             return View();
-
         }
 
         // GET: Activities/Create
