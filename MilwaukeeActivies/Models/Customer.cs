@@ -12,12 +12,12 @@ namespace MilwaukeeActivies.Models
     {
         [Key]
         public int CustomerID { get; set; }
-        public string Name { get; set; }
+        public string CustomerName { get; set; }
         public int Zipcode { get; set; }
-
         
-        [ForeignKey("City")]
-        public int CityID { get; set; }
+        public List<Favorite> Favorites { get; set; }
+        
+        
         [ForeignKey("IdentityUser")] public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 

@@ -13,7 +13,7 @@ namespace MilwaukeeActivies.Models
         [Key]
         public int InterestID { get; set; }
         public bool Indoor { get; set; }
-        public string InterestType { get; set; }
+        public int ActivityTypeId { get; set; }
 
         [ForeignKey("Customer")]
         public int CustomerID { get; set; }

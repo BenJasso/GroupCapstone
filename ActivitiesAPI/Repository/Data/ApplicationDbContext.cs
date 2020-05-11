@@ -11,7 +11,10 @@ namespace Repository.Data
         {
 
         }
+        public DbSet<ActivityType> ActivityTypes { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Activity> Activities { get; set; }
+        public DbSet<City> Cities { get; set; }
     }
 }

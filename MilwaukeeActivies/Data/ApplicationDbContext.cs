@@ -16,11 +16,11 @@ namespace MilwaukeeActivies.Data
         }
 
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<City> Cities { get; set; }
+        
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Interest> Interests { get; set; }
-        public DbSet<ActivityRating> ActivityRatings { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        
+        
         protected override void OnModelCreating(ModelBuilder builder)
 
         
