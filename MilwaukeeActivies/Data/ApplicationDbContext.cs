@@ -14,7 +14,7 @@ namespace MilwaukeeActivies.Data
             : base(options)
         {
         }
-
+        
         public DbSet<Customer> Customers { get; set; }
         
         public DbSet<Favorite> Favorites { get; set; }

@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Repository.Contracts
 {
-    public interface IActivityRepository : IRepositoryBase<Activity>
+    public interface IActivityTypeRepository : IRepositoryBase<ActivityType>
     {
-        List<Activity> GetAllActivities();
-        Activity GetActivity(int activityId);
-        void CreateActivity(Activity activity);
+        List<ActivityType> GetAllActivityTypes();
+        ActivityType GetActivityType(int activityTypeId);
+        void CreateActivityType(ActivityType activityType);
     }
 }
