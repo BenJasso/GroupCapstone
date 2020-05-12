@@ -21,6 +21,31 @@ namespace Repository
                 return _Activities;
             }
         }
+        private IActivityTypeRepository _ActivityTypes;
+        public IActivityTypeRepository ActivityTypes
+        {
+            get
+            {
+                if (_ActivityTypes == null)
+                {
+                    _ActivityTypes = new ActivityTypeRepository(_context);
+                }
+                return _ActivityTypes;
+            }
+        }
+
+        private ICityRepository _Cities;
+        public ICityRepository Cities
+        {
+            get
+            {
+                if (_Cities == null)
+                {
+                    _Cities = new CityRepository(_context);
+                }
+                return _Cities;
+            }
+        }
         public RepositoryWrapper(ApplicationDbContext context)
         {
             _context = context;
