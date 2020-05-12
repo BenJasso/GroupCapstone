@@ -45,7 +45,7 @@ namespace ActivitiesAPI.Controllers
         // POST: Activities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(IFormCollection collection)
         {
             try
             {
