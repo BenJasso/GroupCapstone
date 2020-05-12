@@ -14,7 +14,10 @@ namespace MilwaukeeActivies.Data
             : base(options)
         {
         }
-        
+        public DbSet<Activities> Activities { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<ActivityType> ActivityTypes { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Customer> Customers { get; set; }
         
         public DbSet<Favorite> Favorites { get; set; }
