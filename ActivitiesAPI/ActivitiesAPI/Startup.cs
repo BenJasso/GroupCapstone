@@ -32,6 +32,7 @@ namespace ActivitiesAPI
             services.AddDbContext<ApplicationDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddControllers();
+            //services.AddControllersWithViews(); //added from recieving an error
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,3 +56,6 @@ namespace ActivitiesAPI
         }
     }
 }
+
+
+

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository;
 using Repository.Contracts;
 
 namespace ActivitiesAPI.Controllers
@@ -44,12 +45,14 @@ namespace ActivitiesAPI.Controllers
 
         // POST: Activities/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
+
+        public IActionResult Create(Activity collection)
+
         {
             try
             {
-                // TODO: Add insert logic here
+                _repo.Activities.CreateActivity(collection);
+                _repo.Save();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -65,14 +68,15 @@ namespace ActivitiesAPI.Controllers
             return View();
         }
 
-        // POST: Activities/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        // PUT: Activities/Edit/5
+        [HttpPut]
+        //causes an error [ValidateAntiForgeryToken]
+        public ActionResult Edit( Activity collection)
         {
             try
             {
-                // TODO: Add update logic here
+                _repo.Activities.Update(collection);
+                _repo.Save();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -88,14 +92,15 @@ namespace ActivitiesAPI.Controllers
             return View();
         }
 
-        // POST: Activities/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        // DELETE: Activities/Delete/5
+        [HttpDelete]
+        //causes error[ValidateAntiForgeryToken]
+        public ActionResult Delete(Activity collection)
         {
             try
             {
-                // TODO: Add delete logic here
+                _repo.Activities.Delete(collection);
+                _repo.Save();
 
                 return RedirectToAction(nameof(Index));
             }
