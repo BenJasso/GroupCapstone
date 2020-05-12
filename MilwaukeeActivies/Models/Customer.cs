@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace MilwaukeeActivies.Models
 {
+    
     public class Customer
     {
         [Key]
         public int CustomerID { get; set; }
         public string CustomerName { get; set; }
         public int Zipcode { get; set; }
-        
+      
+
         public List<Favorite> Favorites { get; set; }
         
         
