@@ -26,5 +26,7 @@ namespace MilwaukeeActivies.Models
         [ForeignKey("ActivityTypes")]
         public string ActivityTypeId { get; set; }
 
+        public string Description { get; set; }
+
     }
 }
