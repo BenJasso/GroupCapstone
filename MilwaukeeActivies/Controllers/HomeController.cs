@@ -2,25 +2,61 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MilwaukeeActivies.Data;
 using MilwaukeeActivies.Models;
 
 namespace MilwaukeeActivies.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller   
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _context;
+
+
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:44386/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    ViewBag.country = "";
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+
+
+                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                        var ActivitiesList = details.ToList();
+                        var Activity1 = ActivitiesList[0];
+
+                        return View(ActivitiesList);
+
+
+                    }
+                    else
+                    {
+                        return View();
+
+                    }
+                }
+
+
+
+            
         }
 
         public IActionResult Privacy()

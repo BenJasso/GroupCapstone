@@ -23,5 +23,6 @@ namespace Repository
         public bool Indoor { get; set; }
         [ForeignKey("ActivityTypes")]
         public string ActivityTypeId { get; set; }
+        public string Description { get; set; }
     }
 }
