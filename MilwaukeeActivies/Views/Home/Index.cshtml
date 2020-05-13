@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Activities>
+﻿@model HomeActivityViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -22,38 +22,69 @@
 
     <div>
         <h3>Your Information</h3>
-      
+        <form asp-action="Index">
+            <table>
+                <tr>
+                    <td>
+                        <label asp-for="@Model.MinBudget"></label>
+                        <input asp-for="@Model.MinBudget" class="form-control"></input>
+                    </td>
+                    <td>
+                        <label asp-for="@Model.MaxBudget"></label>
+                        <input asp-for="@Model.MaxBudget" class="form-control"></input>
+                    </td>
+                    <td>
+                        <label asp-for="@Model.dateStart"></label>
+                        <input asp-for="@Model.dateStart" class="form-control"></input>
+                    </td>
+                    <td>
+                        <label asp-for="@Model.dateEnd"></label>
+                        <input asp-for="@Model.dateEnd" class="form-control"></input>
+                    </td>
+                </tr>
+                <tr>
+                <td>
+                    <label asp-for="@Model.season"></label>
+                    <input asp-for="@Model.season" class="form-control"></input>
+                </td>
+                <td>
+                    <label asp-for="@Model.inside"></label>
+                    <input asp-for="@Model.inside" class="form-control"></input>
+                 </td>
+                </tr>
+                </table>
+
+                    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
 
 
+            <div class="container" style="margin-top:30px">
+                <div class="row">
+
+                    <div class="col-sm-1"></div>
+                    <div class="col-md-10">
 
 
-        <div class="container" style="margin-top:30px">
-            <div class="row">
-
-                <div class="col-sm-1"></div>
-                <div class="col-md-10">
-
-
-                    @foreach (var d in Model)
-                    {
-                        <div class="card" style="">
-                            <img class="card-img-top" src="images/bg.PNG" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">@d.EventName</h5>
-                                <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price</p>
-                                <a href="@d.SiteURL" class="btn btn-primary">View</a>
-                                <a href="#" class="btn btn-primary">Favorite</a>
+                        @foreach (var d in Model.Activities)
+                        {
+                            <div class="card" style="">
+                                <img class="card-img-top" src="images/bg.PNG" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">@d.EventName</h5>
+                                    <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
+                                    <a href="@d.SiteURL" class="btn btn-primary">View</a>
+                                    <a href="#" class="btn btn-primary">Favorite</a>
+                                </div>
                             </div>
-                        </div>
 
-                        <br>
-                    }
+                            <br>
+                        }
 
 
+                    </div>
+                    <div class="col-sm-1"></div>
                 </div>
-                <div class="col-sm-1"></div>
             </div>
-        </div>
 
 
 
