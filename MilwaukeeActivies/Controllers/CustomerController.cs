@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +25,41 @@ namespace MilwaukeeActivies.Controllers
         {
             _context = context;
         }
+
+       
+        public async Task<ActionResult> GetAllActivities()
+        {
+            Activities Model = new Activities();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+               
+                if (response.IsSuccessStatusCode)
+                {
+                    
+                   
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                    var ActivitiesList = details.ToList();
+                    var Activity1 = ActivitiesList[0];
+
+                    return View(Activity1);
+
+
+                }
+                else
+                {
+                    return View();
+
+                }
+            }
+
+
+        }
         // GET: Customer
 
         public IActionResult Index(Customer customer1)
@@ -36,8 +73,10 @@ namespace MilwaukeeActivies.Controllers
             }
             else
             {
-
-                return View(customer);
+                var result = GetAllActivities();
+                
+                
+                return View();
             }
         }
 
@@ -68,19 +107,23 @@ namespace MilwaukeeActivies.Controllers
         // POST: Customer/Create
         [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId, CustomerName, IdentityUserId")] Customer customer)
+        public ActionResult Create(Customer item)
         {
-            // TODO: Add insert logic here
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+
+                // TODO: Add insert logic here
+                Customer newCustomer = new Customer();
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                item.IdentityUserId = userId;
+                _context.Customers.Add(item);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
-
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Customers, "Id", customer.IdentityUserId);
-            return View(customer);
-
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Customer/Edit/5
