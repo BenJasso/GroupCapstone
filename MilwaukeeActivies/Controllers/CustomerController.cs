@@ -62,7 +62,7 @@ namespace MilwaukeeActivies.Controllers
         }
         // GET: Customer
 
-        public IActionResult Index(Customer customer1)
+        public async Task<IActionResult> Index(Customer customer1)
         {
             var customer = _context.Users.Where(u => u.Email == User.Identity.Name).SingleOrDefault();
             var id = customer.Id;
@@ -73,10 +73,36 @@ namespace MilwaukeeActivies.Controllers
             }
             else
             {
-                var result = GetAllActivities();
-                
-                
-                return View();
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:44386/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    ViewBag.country = "";
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+
+
+                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                        var ActivitiesList = details.ToList();
+                        var Activity1 = ActivitiesList[0];
+
+                        return View(ActivitiesList);
+
+
+                    }
+                    else
+                    {
+                        return View();
+
+                    }
+                }
+
+
+               
             }
         }
 
