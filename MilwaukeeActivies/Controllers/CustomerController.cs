@@ -40,25 +40,18 @@ namespace MilwaukeeActivies.Controllers
                
                 if (response.IsSuccessStatusCode)
                 {
-                    
-                   
 
                     var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                     var ActivitiesList = details.ToList();
                     var Activity1 = ActivitiesList[0];
 
                     return View(Activity1);
-
-
                 }
                 else
                 {
                     return View();
-
                 }
             }
-
-
         }
         // GET: Customer
 
@@ -83,26 +76,18 @@ namespace MilwaukeeActivies.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-
-
-
                         var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                         var ActivitiesList = details.ToList();
                         var Activity1 = ActivitiesList[0];
 
                         return View(ActivitiesList);
-
-
                     }
                     else
                     {
                         return View();
 
                     }
-                }
-
-
-               
+                } 
             }
         }
 
@@ -173,7 +158,11 @@ namespace MilwaukeeActivies.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CustomerId, CustomerName, IdentityUserId")] Customer customer)
         {
-            // TODO: Add update logic here
+            if (id != customer.CustomerID)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -181,9 +170,16 @@ namespace MilwaukeeActivies.Controllers
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
-                catch
+                catch (DbUpdateConcurrencyException)
                 {
-                    return NotFound();
+                    if (!CustomerExists(customer.CustomerID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -221,5 +217,9 @@ namespace MilwaukeeActivies.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private bool CustomerExists(int id)
+        {
+            return _context.Customers.Any(c => c.CustomerID == id);
+        }
     }
 }
