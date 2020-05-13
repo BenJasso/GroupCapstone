@@ -24,8 +24,7 @@ namespace MilwaukeeActivies.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {
-            
+        { 
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("http://localhost:44386/");
@@ -39,6 +38,7 @@ namespace MilwaukeeActivies.Controllers
 
 
 
+
                     var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                     HomeActivityViewModel homeActivity = new HomeActivityViewModel();
                     homeActivity.Activities = details.ToList();
@@ -49,16 +49,13 @@ namespace MilwaukeeActivies.Controllers
 
 
                 }
+
                     else
                     {
                         return View();
 
                     }
                 }
-
-
-
-            
         }
 
         [HttpPost]
