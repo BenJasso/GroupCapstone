@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MilwaukeeActivies.Data;
 using MilwaukeeActivies.Models;
+using Newtonsoft.Json;
 
 namespace MilwaukeeActivies.Controllers
 {
@@ -27,6 +29,32 @@ namespace MilwaukeeActivies.Controllers
         }
 
        
+
+
+        public ActionResult CreateActivity()
+        {
+           
+            return View();
+        }
+
+        [HttpPost, ActionName("CreateActivity")]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> CreateActivity(Activities Activity)
+        {
+            Activities activity = new Activities();
+            using (var httpClient = new HttpClient())
+            {
+                StringContent content = new StringContent(JsonConvert.SerializeObject(Activity), Encoding.UTF8, "application/json");
+
+                using (var response = await httpClient.PostAsync("https://localhost:44386/api/activities", content)) ;
+              
+            }
+          
+            return View(); 
+            
+        }
+
         public async Task<ActionResult> GetAllActivities()
         {
             Activities Model = new Activities();
@@ -79,7 +107,7 @@ namespace MilwaukeeActivies.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     ViewBag.country = "";
-                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities/");
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -88,7 +116,7 @@ namespace MilwaukeeActivies.Controllers
 
                         var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                         var ActivitiesList = details.ToList();
-                        var Activity1 = ActivitiesList[0];
+                        
 
                         return View(ActivitiesList);
 

@@ -59,6 +59,38 @@ namespace MilwaukeeActivies.Controllers
             
         }
 
+        public async Task<IActionResult> ActivityDetails(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                    var ActivitiesList = details.ToList();
+                    var Activity1 = ActivitiesList.Where(a => a.ActivityId == id).SingleOrDefault();
+
+                    return View(Activity1);
+
+
+                }
+                else
+                {
+                    return View();
+
+                }
+            }
+
+        }
+
         public IActionResult Privacy()
         {
             return View();

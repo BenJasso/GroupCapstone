@@ -16,7 +16,7 @@ namespace ActivitiesAPI.Controllers
     public class ActivitiesController : Controller
     {
 
-        private IRepositoryWrapper _repo;
+        private readonly IRepositoryWrapper _repo;
         public ActivitiesController(IRepositoryWrapper repo)
         {
             _repo = repo;
@@ -51,14 +51,28 @@ namespace ActivitiesAPI.Controllers
         {
             try
             {
-                _repo.Activities.CreateActivity(collection);
+
+                Activity fresh = new Activity();
+                fresh.ActivityTypeId = collection.ActivityTypeId;
+                fresh.Address = collection.Address;
+                fresh.Price = collection.Price;
+                fresh.Date = collection.Date;
+                fresh.EventName = collection.EventName;
+                fresh.Company = collection.Company;
+                fresh.SiteURL = collection.SiteURL;
+                fresh.Season = collection.Season;
+                fresh.ZipCode = collection.ZipCode;
+                fresh.Indoor = collection.Indoor;
+                fresh.Description = collection.Description;
+                fresh.CityId = collection.CityId;
+                _repo.Activities.CreateActivity(fresh);
                 _repo.Save();
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View("index");
             }
         }
 

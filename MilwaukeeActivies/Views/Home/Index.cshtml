@@ -19,11 +19,11 @@
             height: 500px;
             width: 100%;
         }
-        html, body {
+        /*html, body {
             height: 100%;
             margin: 0;
             padding: 0;
-        }
+        }*/
 
         #description {
             font-family: Roboto;
@@ -124,8 +124,8 @@
                             <div class="card-body">
                                 <h5 class="card-title">@d.EventName</h5>
                                 <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price</p>
-                                <a href="@d.SiteURL" class="btn btn-primary">View</a>
-                                <a href="#" class="btn btn-primary">Favorite</a>
+                                <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Home", new {id = d.ActivityId})'"/>
+                                <a href="" class="btn btn-primary">Favorite</a>
                             </div>
                         </div>
 
