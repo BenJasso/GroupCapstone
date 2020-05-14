@@ -35,18 +35,71 @@ namespace MilwaukeeActivies.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
+                    
                         var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-                        var ActivitiesList = details.ToList();
-                        var Activity1 = ActivitiesList[0];
+                        HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                        homeActivity.Activities = details.ToList();
+                        //var ActivitiesList = details.ToList();
+                        //var Activity1 = ActivitiesList[0];
 
-                        return View(ActivitiesList);
+                        return View(homeActivity);
+
+
                     }
+
+
                     else
                     {
                         return View();
 
                     }
                 }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(HomeActivityViewModel home)
+        {
+
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+
+                    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                    homeActivity.Activities = details.Where(a => a.Price < home.MaxBudget &&
+                                                                 a.Date > home.dateStart && a.Date < home.dateEnd &&
+                                                                 a.Season == home.season &&
+                                                                 a.Indoor == home.inside).ToList();
+                   
+                    //var ActivitiesList = details.ToList();
+                    //var Activity1 = ActivitiesList[0];
+
+                    return View(homeActivity);
+
+
+                }
+                else
+                {
+                    return View();
+
+                }
+            }
+
+
+
+
+               
+
         }
 
         public IActionResult Privacy()
