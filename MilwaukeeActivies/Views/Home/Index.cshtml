@@ -4,6 +4,7 @@
     ViewData["Title"] = "Home Page";
 }
 
+
     <div class="text-center">
         <h1 class="display-4">Welcome to Milwaukee Activities!</h1>
         <br />
@@ -12,6 +13,7 @@
         <p>If you are a returning user, login to enhance your experience!</p>
         <br />
     </div>
+
 
     <input id="pac-input" class="controls" type="text" placeholder="Search For a Place">
     <div id="map"></div>
@@ -68,7 +70,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">@d.EventName</h5>
                                     <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
-                                    <a href="@d.SiteURL" class="btn btn-primary">View</a>
+                                    <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Home", new {id = d.ActivityId})'" />
                                     <a href="#" class="btn btn-primary">Favorite</a>
                                     <div class="float-right">Reviews - Rating</div>
                                 </div>
@@ -81,8 +83,12 @@
                     </div>
                     <div class="col-sm-1"></div>
 
+
                 </div>
             </div>
+
+     
+
     </div>
 
     <script>

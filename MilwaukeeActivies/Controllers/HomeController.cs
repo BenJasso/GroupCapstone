@@ -35,20 +35,18 @@ namespace MilwaukeeActivies.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
+                    
+                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                        HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                        homeActivity.Activities = details.ToList();
+                        //var ActivitiesList = details.ToList();
+                        //var Activity1 = ActivitiesList[0];
+
+                        return View(homeActivity);
 
 
+                    }
 
-
-                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-                    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
-                    homeActivity.Activities = details.ToList();
-                    //var ActivitiesList = details.ToList();
-                    //var Activity1 = ActivitiesList[0];
-
-                    return View(homeActivity);
-
-
-                }
 
                     else
                     {
@@ -57,10 +55,10 @@ namespace MilwaukeeActivies.Controllers
                     }
                 }
         }
-
         [HttpPost]
         public async Task<IActionResult> Index(HomeActivityViewModel home)
         {
+
 
             using (var client = new HttpClient())
             {
@@ -76,6 +74,7 @@ namespace MilwaukeeActivies.Controllers
 
 
                     var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+
                     HomeActivityViewModel homeActivity = new HomeActivityViewModel();
                     homeActivity.Activities = details.Where(a => a.Price < home.MaxBudget &&
                                                                  a.Date > home.dateStart && a.Date < home.dateEnd &&
@@ -98,6 +97,8 @@ namespace MilwaukeeActivies.Controllers
 
 
 
+
+               
 
         }
 
