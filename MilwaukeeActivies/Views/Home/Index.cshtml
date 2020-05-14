@@ -4,119 +4,27 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Milwaukee Activities!</h1>
-    <br />
-    <p>Here's some things that are going on around you!</p>
-    <br />
-    <p>If you are a returning user, login to enhance your experience!</p>
-    <br />
-</div>
 
-<head>
-    <style>
-        #map {
-            height: 500px;
-            width: 100%;
-        }
-        /*html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }*/
+    <div class="text-center">
+        <h1 class="display-4">Welcome to Milwaukee Activities!</h1>
+        <br />
+        <p>Here's some things that are going on around you!</p>
+        <br />
+        <p>If you are a returning user, login to enhance your experience!</p>
+        <br />
+    </div>
 
-        #description {
-            font-family: Roboto;
-            font-size: 15px;
-            font-weight: 300;
-        }
 
-        #infowindow-content .title {
-            font-weight: bold;
-        }
-
-        #infowindow-content {
-            display: none;
-        }
-
-        #map #infowindow-content {
-            display: inline;
-        }
-
-        .pac-card {
-            margin: 10px 10px 0 0;
-            border-radius: 2px 0 0 2px;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            background-color: #fff;
-            font-family: Roboto;
-        }
-
-        #pac-container {
-            padding-bottom: 12px;
-            margin-right: 12px;
-        }
-
-        .pac-controls {
-            display: inline-block;
-            padding: 5px 11px;
-        }
-
-            .pac-controls label {
-                font-family: Roboto;
-                font-size: 13px;
-                font-weight: 300;
-            }
-
-        #pac-input {
-            background-color: #fff;
-            font-family: Roboto;
-            font-size: 15px;
-            font-weight: 300;
-            margin-left: 12px;
-            padding: 0 11px 0 13px;
-            text-overflow: ellipsis;
-            width: 400px;
-        }
-
-            #pac-input:focus {
-                border-color: #4d90fe;
-            }
-
-        #title {
-            color: #fff;
-            background-color: #4d90fe;
-            font-size: 25px;
-            font-weight: 500;
-            padding: 6px 12px;
-        }
-
-        #target {
-            width: 345px;
-        }
-    </style>
-</head>
-<body>
     <input id="pac-input" class="controls" type="text" placeholder="Search For a Place">
     <div id="map"></div>
 
-
     <div>
         <h3>Your Information</h3>
-        <hr />
-        
-
-
-
+      
         <div class="container" style="margin-top:30px">
             <div class="row">
-
                 <div class="col-sm-1"></div>
                 <div class="col-md-10">
-
-
                     @foreach (var d in Model)
                     {
                         <div class="card" style="">
@@ -128,24 +36,12 @@
                                 <a href="" class="btn btn-primary">Favorite</a>
                             </div>
                         </div>
-
-                        <br>
                     }
-
-
-                    </div>
+                </div>
                 <div class="col-sm-1"></div>
             </div>
         </div>
-
-
-
-
-
-
     </div>
-
-
 
     <script>
         function initAutocomplete() {
@@ -230,5 +126,3 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGo1Cx5-3NVQ1v599tNS2j3BVgXZtSNa0&libraries=places&callback=initAutocomplete"
             async defer>
     </script>
-</body>
-
