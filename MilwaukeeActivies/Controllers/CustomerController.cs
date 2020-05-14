@@ -18,7 +18,6 @@ namespace MilwaukeeActivies.Controllers
     [Authorize(Roles ="Customer")]
     public class CustomerController : Controller
     {
-
         private readonly ApplicationDbContext _context;
 
         public CustomerController(ApplicationDbContext context)
@@ -26,7 +25,6 @@ namespace MilwaukeeActivies.Controllers
             _context = context;
         }
 
-       
         public async Task<ActionResult> GetAllActivities()
         {
             Activities Model = new Activities();
@@ -40,7 +38,6 @@ namespace MilwaukeeActivies.Controllers
                
                 if (response.IsSuccessStatusCode)
                 {
-
                     var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                     var ActivitiesList = details.ToList();
                     var Activity1 = ActivitiesList[0];
@@ -53,8 +50,8 @@ namespace MilwaukeeActivies.Controllers
                 }
             }
         }
-        // GET: Customer
 
+        // GET: Customer
         public async Task<IActionResult> Index(Customer customer1)
         {
             var customer = _context.Users.Where(u => u.Email == User.Identity.Name).SingleOrDefault();
@@ -85,7 +82,6 @@ namespace MilwaukeeActivies.Controllers
                     else
                     {
                         return View();
-
                     }
                 } 
             }
@@ -98,9 +94,7 @@ namespace MilwaukeeActivies.Controllers
             {
                 return NotFound();
             }
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .SingleOrDefaultAsync(c => c.CustomerID == id);
+            var customer = await _context.Customers.Include(c => c.IdentityUser).SingleOrDefaultAsync(c => c.CustomerID == id);
             if (customer == null)
             {
                 return NotFound();
@@ -122,7 +116,6 @@ namespace MilwaukeeActivies.Controllers
         {
             try
             {
-
                 // TODO: Add insert logic here
                 Customer newCustomer = new Customer();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -195,9 +188,7 @@ namespace MilwaukeeActivies.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .SingleOrDefaultAsync(c => c.CustomerID == id);
+            var customer = await _context.Customers.Include(c => c.IdentityUser).SingleOrDefaultAsync(c => c.CustomerID == id);
             if (customer == null)
             {
                 return NotFound();
@@ -220,6 +211,59 @@ namespace MilwaukeeActivies.Controllers
         private bool CustomerExists(int id)
         {
             return _context.Customers.Any(c => c.CustomerID == id);
+        }
+
+        // GET Customer/Favorites/5
+        public async Task<IActionResult> Favorites(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customer = await _context.Customers.Include(c => c.IdentityUser).SingleOrDefaultAsync(c => c.CustomerID == id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            return View(customer);
+        }
+
+        // POST: Customer/Favorites/5
+        [HttpPost, ActionName("Favorites")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Favorites(int id)
+        {
+            List<Activities> favoredActivities = null;
+            var customerFavorites = _context.Favorites.Where(f => f.CustomerID == id).ToList();
+            if (_context.Favorites.Where(f => f.CustomerID == id).ToList() == null)
+            {
+                return View("Index");
+            }
+            foreach (Favorite favoredActivity in customerFavorites)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:44386/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    ViewBag.country = "";
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                        var ActivitiesList = details.ToList();
+                        var Activity1 = ActivitiesList.Where(a => a.ActivityId == favoredActivity.ActivityID).SingleOrDefault();
+                        favoredActivities.Add(Activity1);
+                    }
+                    else
+                    {
+                      
+                    }
+                }
+            }
+            return View(favoredActivities);
         }
     }
 }
