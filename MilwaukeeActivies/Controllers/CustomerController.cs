@@ -22,13 +22,13 @@ namespace MilwaukeeActivies.Controllers
     [Authorize(Roles ="Customer")]
     public class CustomerController : Controller
     {
-
         private readonly ApplicationDbContext _context;
 
         public CustomerController(ApplicationDbContext context)
         {
             _context = context;
         }
+
 
         public ActionResult InterestProcess()
         {
@@ -72,33 +72,10 @@ namespace MilwaukeeActivies.Controllers
             };
             
         }
+
        
        
-        public async Task<IActionResult> SelectInterests()
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:44386/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                ViewBag.country = "";
-                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/ActivityTypes");
-
-                if (response.IsSuccessStatusCode)
-                {
-
-                    var details = await response.Content.ReadAsAsync<IEnumerable<ActivityType>>();
-                    var ActivityTypeList = details.ToList();
-                    
-
-                    return View(ActivityTypeList);
-                }
-                else
-                {
-                    return View();
-                }
-            }
-        }
+    
 
         public ActionResult CreateActivity()
         {
@@ -124,6 +101,7 @@ namespace MilwaukeeActivies.Controllers
             
         }
 
+
         public async Task<ActionResult> GetAllActivities()
         {
             Activities Model = new Activities();
@@ -137,7 +115,6 @@ namespace MilwaukeeActivies.Controllers
                
                 if (response.IsSuccessStatusCode)
                 {
-
                     var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                     var ActivitiesList = details.ToList();
                     var Activity1 = ActivitiesList[0];
@@ -150,42 +127,89 @@ namespace MilwaukeeActivies.Controllers
                 }
             }
         }
+
         // GET: Customer
-
-        public async Task<IActionResult> Index(Customer customer1)
+        public async Task<IActionResult> Index()
         {
-            var customer = _context.Users.Where(u => u.Email == User.Identity.Name).SingleOrDefault();
-            var id = customer.Id;
-            customer1 = _context.Customers.Where(c => c.IdentityUserId == id).SingleOrDefault();
-            if (_context.Customers.Where(e => e.IdentityUserId == id).SingleOrDefault() == null)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            ViewBag.UserId = usercurrent.CustomerID;
+            using (var client = new HttpClient())
             {
-                return View("Create");
-            }
-            else
-            {
-                using (var client = new HttpClient())
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                if (response.IsSuccessStatusCode)
                 {
-                    client.BaseAddress = new Uri("http://localhost:44386/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    ViewBag.country = "";
-                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities/");
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-                        var ActivitiesList = details.ToList();
-                        
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                    homeActivity.Activities = details.ToList();
+                    //var ActivitiesList = details.ToList();
+                    //var Activity1 = ActivitiesList[0];
 
-                        return View(ActivitiesList);
-                    }
-                    else
-                    {
-                        return View();
+                    return View(homeActivity);
 
-                    }
-                } 
+
+                }
+
+
+                else
+                {
+                    return View();
+
+                }
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(HomeActivityViewModel home)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            ViewBag.UserId = usercurrent.CustomerID;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+
+                    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                    homeActivity.Activities = details.Where(a => a.Price < home.MaxBudget &&
+                                                                 a.Date > home.dateStart && a.Date < home.dateEnd &&
+                                                                 a.Season == home.season &&
+                                                                 a.Indoor == home.inside).ToList();
+
+                    //var ActivitiesList = details.ToList();
+                    //var Activity1 = ActivitiesList[0];
+
+                    return View(homeActivity);
+
+
+                }
+                else
+                {
+                    return View();
+
+                }
+            }
+
+
+
+
+
+
         }
 
         // GET: Customer/Details/5
@@ -195,9 +219,7 @@ namespace MilwaukeeActivies.Controllers
             {
                 return NotFound();
             }
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .SingleOrDefaultAsync(c => c.CustomerID == id);
+            var customer = await _context.Customers.Include(c => c.IdentityUser).SingleOrDefaultAsync(c => c.CustomerID == id);
             if (customer == null)
             {
                 return NotFound();
@@ -219,14 +241,13 @@ namespace MilwaukeeActivies.Controllers
         {
             try
             {
-
                 // TODO: Add insert logic here
                 Customer newCustomer = new Customer();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 item.IdentityUserId = userId;
                 _context.Customers.Add(item);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(InterestProcess));
             }
             catch
             {
@@ -292,9 +313,7 @@ namespace MilwaukeeActivies.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .SingleOrDefaultAsync(c => c.CustomerID == id);
+            var customer = await _context.Customers.Include(c => c.IdentityUser).SingleOrDefaultAsync(c => c.CustomerID == id);
             if (customer == null)
             {
                 return NotFound();
@@ -319,7 +338,22 @@ namespace MilwaukeeActivies.Controllers
             return _context.Customers.Any(c => c.CustomerID == id);
         }
 
-        
-        
+
+        // GET Customer/Favorites/5
+        public async Task<IActionResult> AddFavorites(int id, int activityId)
+        {
+            Favorite favorite = new Favorite
+            {
+                ActivityID = activityId,
+                CustomerID = id
+            };
+            _context.Favorites.Add(favorite);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        //POST: Customer/Favorites/5
+       
+
     }
 }
