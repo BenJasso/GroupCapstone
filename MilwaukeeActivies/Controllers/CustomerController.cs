@@ -212,6 +212,84 @@ namespace MilwaukeeActivies.Controllers
 
         }
 
+        public IActionResult CreateReview(int activityId)
+        {
+            ViewBag.ActivityId = activityId;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> CreateReview(Review Item)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Customer newCustomer = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+                Item.CustomerId = newCustomer.CustomerID;
+                
+                using (var httpClient = new HttpClient())
+                {
+                    StringContent content = new StringContent(JsonConvert.SerializeObject(Item), Encoding.UTF8, "application/json");
+                    
+
+                    using (var response = await httpClient.PostAsync("https://localhost:44386/api/reviews", content));
+
+                }
+
+                return RedirectToAction("ViewReviews", new { activityId = Item.ActivityId });
+            }
+            catch
+            {
+                return View();
+            }
+
+        }
+
+
+
+
+        public async Task<IActionResult> ViewReviews(int activityId)
+        {
+            List<Review> activityReviews = new List<Review>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/reviews");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Review>>();
+                    foreach (Review item in details)
+                    {
+                        if(item.ActivityId == activityId)
+                        {
+                            activityReviews.Add(item);
+                        }
+                        
+                    }
+
+
+                    return View(activityReviews);
+
+
+                }
+                else
+                {
+                    return View();
+
+                }
+            }
+        }
+
         // GET: Customer/Details/5
         public async Task<IActionResult> Details(int? id)
         {

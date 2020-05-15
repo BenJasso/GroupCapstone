@@ -46,6 +46,18 @@ namespace Repository
                 return _Cities;
             }
         }
+        private IReviewRepository _Reviews;
+        public IReviewRepository Reviews
+        {
+            get
+            {
+                if (_Reviews == null)
+                {
+                    _Reviews = new ReviewRepository(_context);
+                }
+                return _Reviews;
+            }
+        }
         public RepositoryWrapper(ApplicationDbContext context)
         {
             _context = context;

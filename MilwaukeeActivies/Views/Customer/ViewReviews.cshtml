@@ -1,0 +1,39 @@
+﻿@model List<MilwaukeeActivies.Models.Review>
+
+@{
+    ViewData["Title"] = "ViewReviews";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<h1>ViewReviews</h1>
+
+<div>
+    <h4>Review</h4>
+    <hr />
+    @foreach (var item in Model)
+    {
+
+
+    <dl class="row">
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => item.Comment)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => item.Comment)
+        </dd>
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => item.Rating)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => item.Rating)
+        </dd>
+        
+    </dl>
+    }
+</div>
+<div>
+    @Html.ActionLink("CreateReview", "CreateReview", new { activityId = Model[0].ActivityId}) |
+    <a asp-action="Index">Back to List</a>
+</div>

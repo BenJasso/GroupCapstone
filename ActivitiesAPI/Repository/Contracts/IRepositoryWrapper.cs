@@ -9,6 +9,7 @@ namespace Repository.Contracts
         public ICityRepository Cities { get; }
         public IActivityRepository Activities { get; }
         public IActivityTypeRepository ActivityTypes { get; }
+        public IReviewRepository Reviews { get; }
         void Save();
     }
 }
