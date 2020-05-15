@@ -25,30 +25,20 @@
                 <tr>
                     <td>
                         <label asp-for="@Model.MinBudget"></label>
-                        <input asp-for="@Model.MinBudget" class="form-control"></input>
+                        <input asp-for="@Model.MinBudget" value ="0" class="form-control"></input>
                     </td>
                     <td>
                         <label asp-for="@Model.MaxBudget"></label>
-                        <input asp-for="@Model.MaxBudget" class="form-control"></input>
+                        <input asp-for="@Model.MaxBudget" value="200" class="form-control"></input>
                     </td>
                     <td>
                         <label asp-for="@Model.dateStart"></label>
-                        <input asp-for="@Model.dateStart" class="form-control"></input>
+                        <input asp-for="@Model.dateStart" value="@DateTime.Now.ToString("s")" class="form-control"></input>
                     </td>
                     <td>
                         <label asp-for="@Model.dateEnd"></label>
-                        <input asp-for="@Model.dateEnd" class="form-control"></input>
+                        <input asp-for="@Model.dateEnd" value="@DateTime.MaxValue.ToString("s")" class="form-control"></input>
                     </td>
-                </tr>
-                <tr>
-                <td>
-                    <label asp-for="@Model.season"></label>
-                    <input asp-for="@Model.season" class="form-control"></input>
-                </td>
-                <td>
-                    <label asp-for="@Model.inside"></label>
-                    <input asp-for="@Model.inside" class="form-control"></input>
-                 </td>
                 </tr>
                 </table>
 

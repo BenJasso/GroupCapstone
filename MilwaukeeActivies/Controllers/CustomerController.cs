@@ -210,9 +210,7 @@ namespace MilwaukeeActivies.Controllers
 
                     HomeActivityViewModel homeActivity = new HomeActivityViewModel();
                     homeActivity.Activities = details.Where(a => a.Price < home.MaxBudget &&
-                                                                 a.Date > home.dateStart && a.Date < home.dateEnd &&
-                                                                 a.Season == home.season &&
-                                                                 a.Indoor == home.inside).ToList();
+                                                                 a.Date > home.dateStart && a.Date < home.dateEnd).ToList();
 
                     //var ActivitiesList = details.ToList();
                     //var Activity1 = ActivitiesList[0];

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MilwaukeeActivies.Data;
 
 namespace MilwaukeeActivies.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200515190830_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,8 +50,8 @@ namespace MilwaukeeActivies.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "99097acb-0cbf-4682-a2c3-9f21c017cf2d",
-                            ConcurrencyStamp = "775f4212-5e64-4996-9094-9e5883d27cd5",
+                            Id = "edf8aa84-df8d-4cf6-a9c5-161e1bfdf7a9",
+                            ConcurrencyStamp = "2da53992-0661-40c5-8920-62d80541f6e3",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
