@@ -121,31 +121,41 @@ namespace MilwaukeeActivies.Controllers
         // GET: Customer
         public async Task<IActionResult> Index()
         {
+           
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            ViewBag.UserId = usercurrent.CustomerID;
-            using (var client = new HttpClient())
+            if (_context.Customers.Where(e => e.IdentityUserId == userId).SingleOrDefault() == null)
             {
-                client.BaseAddress = new Uri("http://localhost:44386/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                ViewBag.country = "";
-                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+                return View("Create");
+            }
+            else
+            {
 
-                if (response.IsSuccessStatusCode)
+
+                var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+                ViewBag.UserId = usercurrent.CustomerID;
+                using (var client = new HttpClient())
                 {
+                    client.BaseAddress = new Uri("http://localhost:44386/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    ViewBag.country = "";
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
 
-                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-                    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
-                    homeActivity.Activities = details.ToList();
-                    //var ActivitiesList = details.ToList();
-                    //var Activity1 = ActivitiesList[0];
+                    if (response.IsSuccessStatusCode)
+                    {
 
-                    return View(homeActivity);
-                }
-                else
-                {
-                    return View();
+                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                        HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                        homeActivity.Activities = details.ToList();
+                        //var ActivitiesList = details.ToList();
+                        //var Activity1 = ActivitiesList[0];
+
+                        return View(homeActivity);
+                    }
+                    else
+                    {
+                        return View();
+                    }
                 }
             }
         }
