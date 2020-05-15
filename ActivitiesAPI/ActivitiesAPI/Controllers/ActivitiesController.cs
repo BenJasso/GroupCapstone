@@ -53,7 +53,7 @@ namespace ActivitiesAPI.Controllers
             {
 
                 Activity fresh = new Activity();
-                fresh.ActivityTypeId = collection.ActivityTypeId;
+                fresh.ActivityTypes = collection.ActivityTypes;
                 fresh.Address = collection.Address;
                 fresh.Price = collection.Price;
                 fresh.Date = collection.Date;
@@ -64,7 +64,7 @@ namespace ActivitiesAPI.Controllers
                 fresh.ZipCode = collection.ZipCode;
                 fresh.Indoor = collection.Indoor;
                 fresh.Description = collection.Description;
-                fresh.CityId = collection.CityId;
+                fresh.CityName = collection.CityName;
                 _repo.Activities.CreateActivity(fresh);
                 _repo.Save();
 
