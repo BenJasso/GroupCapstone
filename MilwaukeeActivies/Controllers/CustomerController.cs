@@ -432,21 +432,29 @@ namespace MilwaukeeActivies.Controllers
         // GET Customer/Favorites/5
         public async Task<IActionResult> AddFavorites(int id, int activityId)
         {
-            Favorite favorite = new Favorite
+
+            var alreadyFavorited = _context.Favorites.Where(f => f.CustomerID == id && f.ActivityID == activityId).SingleOrDefault();
+            if (alreadyFavorited == null)
             {
-                ActivityID = activityId,
-                CustomerID = id
-            };
-            _context.Favorites.Add(favorite);
-            _context.SaveChanges();
+                Favorite favorite = new Favorite
+                {
+                    ActivityID = activityId,
+                    CustomerID = id
+                };
+                _context.Favorites.Add(favorite);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Favorites()
         {
+            
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Customer newCustomer = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            List<Activities> favoredActivities = new List<Activities>();
+            ViewBag.userId = newCustomer.CustomerID;
+            List <Activities> favoredActivities = new List<Activities>();
             var customerFavorites = _context.Favorites.Where(f => f.CustomerID == newCustomer.CustomerID).ToList();
             if (_context.Favorites.Where(f => f.CustomerID == newCustomer.CustomerID).ToList() == null)
             {
@@ -473,6 +481,18 @@ namespace MilwaukeeActivies.Controllers
             }
             return View(favoredActivities);
         }
+
+        
+        public async Task<IActionResult> RemoveFavorite(int id, int userID)
+        {
+            var favorite = _context.Favorites.Where(f => f.CustomerID == userID && f.ActivityID == id).SingleOrDefault();
+            _context.Favorites.Remove(favorite);
+            _context.SaveChanges();
+           
+            return RedirectToAction(nameof(Index));
+        }
+
+
         //// POST: Customer/Favorites/5
         //[HttpPost, ActionName("Favorites")]
         //[ValidateAntiForgeryToken]
