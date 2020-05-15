@@ -29,7 +29,6 @@ namespace MilwaukeeActivies.Controllers
             _context = context;
         }
 
-
         public ActionResult InterestProcess()
         {
             var model = new InterestModel
@@ -70,16 +69,10 @@ namespace MilwaukeeActivies.Controllers
                      new SelectListItem {Text = "Night Activities", Value = "Night Activities"},
                       new SelectListItem {Text = "Water", Value = "Water"}
             };
-            
         }
-
-       
-       
-    
 
         public ActionResult CreateActivity()
         {
-           
             return View();
         }
 
@@ -96,11 +89,8 @@ namespace MilwaukeeActivies.Controllers
                 using (var response = await httpClient.PostAsync("https://localhost:44386/api/activities", content)) ;
               
             }
-          
             return View(); 
-            
         }
-
 
         public async Task<ActionResult> GetAllActivities()
         {
@@ -152,15 +142,10 @@ namespace MilwaukeeActivies.Controllers
                     //var Activity1 = ActivitiesList[0];
 
                     return View(homeActivity);
-
-
                 }
-
-
                 else
                 {
                     return View();
-
                 }
             }
         }
@@ -180,9 +165,6 @@ namespace MilwaukeeActivies.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-
-
-
                     var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
 
                     HomeActivityViewModel homeActivity = new HomeActivityViewModel();
@@ -195,21 +177,12 @@ namespace MilwaukeeActivies.Controllers
                     //var Activity1 = ActivitiesList[0];
 
                     return View(homeActivity);
-
-
                 }
                 else
                 {
                     return View();
-
                 }
             }
-
-
-
-
-
-
         }
 
         public IActionResult CreateReview(int activityId)
@@ -430,8 +403,40 @@ namespace MilwaukeeActivies.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //POST: Customer/Favorites/5
-       
+        // POST: Customer/Favorites/5
+        [HttpPost, ActionName("Favorites")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Favorites(int id)
+        {
+            List<Activities> favoredActivities = null;
+            var customerFavorites = _context.Favorites.Where(f => f.CustomerID == id).ToList();
+            if (_context.Favorites.Where(f => f.CustomerID == id).ToList() == null)
+            {
+                return View("Index");
+            }
+            foreach (Favorite favoredActivity in customerFavorites)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:44386/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    ViewBag.country = "";
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                        var ActivitiesList = details.ToList();
+                        var Activity1 = ActivitiesList.Where(a => a.ActivityId == favoredActivity.ActivityID).SingleOrDefault();
+                        favoredActivities.Add(Activity1);
+                    }
+                    else
+                    {
 
+                    }
+                }
+            }
+            return View(favoredActivities);
+        }
     }
 }

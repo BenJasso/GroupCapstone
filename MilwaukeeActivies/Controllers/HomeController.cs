@@ -35,7 +35,6 @@ namespace MilwaukeeActivies.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                    
                         var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                         HomeActivityViewModel homeActivity = new HomeActivityViewModel();
                         homeActivity.Activities = details.ToList();
@@ -43,11 +42,7 @@ namespace MilwaukeeActivies.Controllers
                         //var Activity1 = ActivitiesList[0];
 
                         return View(homeActivity);
-
-
                     }
-
-
                     else
                     {
                         return View();
@@ -71,8 +66,6 @@ namespace MilwaukeeActivies.Controllers
                 if (response.IsSuccessStatusCode)
                 {
 
-
-
                     var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
 
                     HomeActivityViewModel homeActivity = new HomeActivityViewModel();
@@ -86,7 +79,6 @@ namespace MilwaukeeActivies.Controllers
 
                     return View(homeActivity);
 
-
                 }
                 else
                 {
@@ -94,12 +86,6 @@ namespace MilwaukeeActivies.Controllers
 
                 }
             }
-
-
-
-
-               
-
         }
 
         public IActionResult Privacy()
