@@ -1,6 +1,7 @@
 ﻿@model List<MilwaukeeActivies.Models.Activities>
 
 @{
+    var currentUserId = ViewBag.UserId;
     ViewData["Title"] = "Favorites";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
@@ -17,12 +18,13 @@
             @foreach (var d in Model)
             {
                 <div class="card" style="">
+                    <br />
                     <img class="card-img-top" src="images/bg.PNG" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">@d.EventName</h5>
                         <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
                         <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'" />
-                        <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("RemoveFavorite", "Customer" , new { id = ViewBag.UserId, activityId = d.ActivityId})'">Remove Favorite</a>
+                        <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("RemoveFavorite", "Customer" , new { id = d.ActivityId, userID = currentUserId})'">Remove Favorite</a>
                         <a href="#" class="btn btn-primary, float-right" onclick="location.href='@Url.Action("ViewReviews", "Customer" , new { activityId = d.ActivityId})'">View Reviews</a>
                     </div>
 

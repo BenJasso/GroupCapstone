@@ -86,6 +86,7 @@ namespace MilwaukeeActivies.Controllers
             }
         }
 
+
         public async Task<IActionResult> ActivityDetails(int id)
         {
             using (var client = new HttpClient())
