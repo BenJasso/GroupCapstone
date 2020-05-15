@@ -10,7 +10,7 @@ namespace Repository
         [Key]
         public int ActivityId { get; set; }
         [ForeignKey("City")]
-        public int CityName { get; set; }
+        public string CityName { get; set; }
         public double Price { get; set; }
         public DateTime Date { get; set; }
         public string EventName { get; set; }
