@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using Newtonsoft.Json;
 
 namespace MilwaukeeActivies.Controllers
 {
+    
     [Authorize(Roles ="Customer")]
     public class CustomerController : Controller
     {
@@ -26,6 +28,58 @@ namespace MilwaukeeActivies.Controllers
         {
             _context = context;
         }
+<<<<<<< HEAD
+=======
+
+
+        public ActionResult InterestProcess()
+        {
+            var model = new InterestModel
+            {
+                AvailableInterestTypes = getInterestTypes()
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InterestProcess(InterestModel model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            List<string> listOfInterestTypes = model.SelectedInterests.ToList();
+            foreach(string item in listOfInterestTypes)
+            {
+                var SelectedInterest = new Interest()
+                {
+                    ActivityType = item,
+                    CustomerID = usercurrent.CustomerID
+                };
+                _context.Interests.Add(SelectedInterest);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IList<SelectListItem> getInterestTypes()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem {Text = "Basketball", Value = "Basketball"},
+                 new SelectListItem {Text = "Baseball", Value = "Baseball"},
+                  new SelectListItem {Text = "Running", Value = "Running"},
+                   new SelectListItem {Text = "Walking", Value = "Walking"},
+                    new SelectListItem {Text = "Biking", Value = "Biking"},
+                     new SelectListItem {Text = "Night Activities", Value = "Night Activities"},
+                      new SelectListItem {Text = "Water", Value = "Water"}
+            };
+            
+        }
+
+       
+       
+    
+
+>>>>>>> 00af62cc1de33d93b9842caf8ce82f777fc57139
         public ActionResult CreateActivity()
         {
            
@@ -50,6 +104,10 @@ namespace MilwaukeeActivies.Controllers
             
         }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 00af62cc1de33d93b9842caf8ce82f777fc57139
         public async Task<ActionResult> GetAllActivities()
         {
             Activities Model = new Activities();
@@ -77,39 +135,87 @@ namespace MilwaukeeActivies.Controllers
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index(Customer customer1)
+        public async Task<IActionResult> Index()
         {
-            var customer = _context.Users.Where(u => u.Email == User.Identity.Name).SingleOrDefault();
-            var id = customer.Id;
-            customer1 = _context.Customers.Where(c => c.IdentityUserId == id).SingleOrDefault();
-            if (_context.Customers.Where(e => e.IdentityUserId == id).SingleOrDefault() == null)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            ViewBag.UserId = usercurrent.CustomerID;
+            using (var client = new HttpClient())
             {
-                return View("Create");
-            }
-            else
-            {
-                using (var client = new HttpClient())
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                if (response.IsSuccessStatusCode)
                 {
-                    client.BaseAddress = new Uri("http://localhost:44386/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    ViewBag.country = "";
-                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities/");
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-                        var ActivitiesList = details.ToList();
-                        
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+                    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                    homeActivity.Activities = details.ToList();
+                    //var ActivitiesList = details.ToList();
+                    //var Activity1 = ActivitiesList[0];
 
-                        return View(ActivitiesList);
-                    }
-                    else
-                    {
-                        return View();
-                    }
-                } 
+                    return View(homeActivity);
+
+
+                }
+
+
+                else
+                {
+                    return View();
+
+                }
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(HomeActivityViewModel home)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            ViewBag.UserId = usercurrent.CustomerID;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+
+                    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+                    homeActivity.Activities = details.Where(a => a.Price < home.MaxBudget &&
+                                                                 a.Date > home.dateStart && a.Date < home.dateEnd &&
+                                                                 a.Season == home.season &&
+                                                                 a.Indoor == home.inside).ToList();
+
+                    //var ActivitiesList = details.ToList();
+                    //var Activity1 = ActivitiesList[0];
+
+                    return View(homeActivity);
+
+
+                }
+                else
+                {
+                    return View();
+
+                }
+            }
+
+
+
+
+
+
         }
 
         // GET: Customer/Details/5
@@ -147,7 +253,7 @@ namespace MilwaukeeActivies.Controllers
                 item.IdentityUserId = userId;
                 _context.Customers.Add(item);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(InterestProcess));
             }
             catch
             {
@@ -238,6 +344,7 @@ namespace MilwaukeeActivies.Controllers
             return _context.Customers.Any(c => c.CustomerID == id);
         }
 
+
         // GET Customer/Favorites/5
         public async Task<IActionResult> AddFavorites(int id, int activityId)
         {
@@ -251,41 +358,8 @@ namespace MilwaukeeActivies.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Customer/Favorites/5
-        [HttpPost, ActionName("Favorites")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Favorites(int id)
-        {
-            List<Activities> favoredActivities = null;
-            var customerFavorites = _context.Favorites.Where(f => f.CustomerID == id).ToList();
-            if (_context.Favorites.Where(f => f.CustomerID == id).ToList() == null)
-            {
-                return View("Index");
-            }
-            foreach (Favorite favoredActivity in customerFavorites)
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:44386/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    ViewBag.country = "";
-                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+        //POST: Customer/Favorites/5
+       
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-                        var ActivitiesList = details.ToList();
-                        var Activity1 = ActivitiesList.Where(a => a.ActivityId == favoredActivity.ActivityID).SingleOrDefault();
-                        favoredActivities.Add(Activity1);
-                    }
-                    else
-                    {
-                      
-                    }
-                }
-            }
-            return View(favoredActivities);
-        }
     }
 }
