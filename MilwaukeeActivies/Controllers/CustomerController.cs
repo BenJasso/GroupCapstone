@@ -26,12 +26,6 @@ namespace MilwaukeeActivies.Controllers
         {
             _context = context;
         }
-
-<<<<<<< HEAD
-=======
-       
-
-
         public ActionResult CreateActivity()
         {
            
@@ -56,7 +50,6 @@ namespace MilwaukeeActivies.Controllers
             
         }
 
->>>>>>> f48f3513ea5d2b8d65cbfa2ce5b2abf15bff8e8b
         public async Task<ActionResult> GetAllActivities()
         {
             Activities Model = new Activities();
@@ -246,19 +239,16 @@ namespace MilwaukeeActivies.Controllers
         }
 
         // GET Customer/Favorites/5
-        public async Task<IActionResult> Favorites(int? id)
+        public async Task<IActionResult> AddFavorites(int id, int activityId)
         {
-            if (id == null)
+            Favorite favorite = new Favorite
             {
-                return NotFound();
-            }
-
-            var customer = await _context.Customers.Include(c => c.IdentityUser).SingleOrDefaultAsync(c => c.CustomerID == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return View(customer);
+                ActivityID = activityId,
+                CustomerID = id
+            };
+            _context.Favorites.Add(favorite);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Customer/Favorites/5
