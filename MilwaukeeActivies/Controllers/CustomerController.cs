@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using Newtonsoft.Json;
 
 namespace MilwaukeeActivies.Controllers
 {
+    
     [Authorize(Roles ="Customer")]
     public class CustomerController : Controller
     {
@@ -28,8 +30,75 @@ namespace MilwaukeeActivies.Controllers
             _context = context;
         }
 
-       
+        public ActionResult InterestProcess()
+        {
+            var model = new InterestModel
+            {
+                AvailableInterestTypes = getInterestTypes()
+            };
+            return View(model);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> InterestProcess(InterestModel model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            List<string> listOfInterestTypes = model.SelectedInterests.ToList();
+            foreach(string item in listOfInterestTypes)
+            {
+                var SelectedInterest = new Interest()
+                {
+                    ActivityType = item,
+                    CustomerID = usercurrent.CustomerID
+                };
+                _context.Interests.Add(SelectedInterest);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IList<SelectListItem> getInterestTypes()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem {Text = "Basketball", Value = "Basketball"},
+                 new SelectListItem {Text = "Baseball", Value = "Baseball"},
+                  new SelectListItem {Text = "Running", Value = "Running"},
+                   new SelectListItem {Text = "Walking", Value = "Walking"},
+                    new SelectListItem {Text = "Biking", Value = "Biking"},
+                     new SelectListItem {Text = "Night Activities", Value = "Night Activities"},
+                      new SelectListItem {Text = "Water", Value = "Water"}
+            };
+            
+        }
+       
+       
+        public async Task<IActionResult> SelectInterests()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/ActivityTypes");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<ActivityType>>();
+                    var ActivityTypeList = details.ToList();
+                    
+
+                    return View(ActivityTypeList);
+                }
+                else
+                {
+                    return View();
+                }
+            }
+        }
 
         public ActionResult CreateActivity()
         {
@@ -249,5 +318,8 @@ namespace MilwaukeeActivies.Controllers
         {
             return _context.Customers.Any(c => c.CustomerID == id);
         }
+
+        
+        
     }
 }
