@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "ActivityDetails";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
 <h1>ActivityDetails</h1>
@@ -75,6 +76,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+  
     <a asp-action="Index">Back to List</a>
 </div>

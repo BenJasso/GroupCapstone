@@ -150,7 +150,7 @@ namespace MilwaukeeActivies.Controllers
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> AllActivities()
         {
            
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -191,7 +191,7 @@ namespace MilwaukeeActivies.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Index(HomeActivityViewModel home)
+        public async Task<IActionResult> AllActivities(HomeActivityViewModel home)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
@@ -212,8 +212,7 @@ namespace MilwaukeeActivies.Controllers
                     homeActivity.Activities = details.Where(a => a.Price < home.MaxBudget &&
                                                                  a.Date > home.dateStart && a.Date < home.dateEnd).ToList();
 
-                    //var ActivitiesList = details.ToList();
-                    //var Activity1 = ActivitiesList[0];
+                  
 
                     return View(homeActivity);
                 }
@@ -482,6 +481,53 @@ namespace MilwaukeeActivies.Controllers
             return View(favoredActivities);
         }
 
+
+        public async Task<IActionResult> Index()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            ViewBag.UserId = usercurrent.CustomerID;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+
+                    List<Activities> allActivities = details.ToList();
+                    List<Interest> customerInterests = _context.Interests.Where(i => i.CustomerID == usercurrent.CustomerID).ToList();
+                    List<Activities> filteredActivities = new List<Activities>();
+                    foreach (var item in customerInterests)
+                    {
+                        List<Activities> temp = new List<Activities>();
+                        temp = allActivities.Where(a => a.ActivityTypes == item.ActivityType).ToList();
+                        foreach(var item2 in temp)
+                        {
+                            filteredActivities.Add(item2);
+                        }
+
+                    }
+
+
+                
+                    return View(filteredActivities);
+                }
+                else
+                {
+                    return View();
+                }
+            }
+        }
+
+
+
+
         
         public async Task<IActionResult> RemoveFavorite(int id, int userID)
         {
@@ -493,40 +539,6 @@ namespace MilwaukeeActivies.Controllers
         }
 
 
-        //// POST: Customer/Favorites/5
-        //[HttpPost, ActionName("Favorites")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Favorites(int id)
-        //{
-        //    List<Activities> favoredActivities = null;
-        //    var customerFavorites = _context.Favorites.Where(f => f.CustomerID == id).ToList();
-        //    if (_context.Favorites.Where(f => f.CustomerID == id).ToList() == null)
-        //    {
-        //        return View("Index");
-        //    }
-        //    foreach (Favorite favoredActivity in customerFavorites)
-        //    {
-        //        using (var client = new HttpClient())
-        //        {
-        //            client.BaseAddress = new Uri("http://localhost:44386/");
-        //            client.DefaultRequestHeaders.Accept.Clear();
-        //            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //            ViewBag.country = "";
-        //            HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
-        //            if (response.IsSuccessStatusCode)
-        //            {
-        //                var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-        //                var ActivitiesList = details.ToList();
-        //                var Activity1 = ActivitiesList.Where(a => a.ActivityId == favoredActivity.ActivityID).SingleOrDefault();
-        //                favoredActivities.Add(Activity1);
-        //            }
-        //            else
-        //            {
-
-        //            }
-        //        }
-        //    }
-        //    return View(favoredActivities);
-        //}
+       
     }
 }
