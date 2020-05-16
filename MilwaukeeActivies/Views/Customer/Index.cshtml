@@ -24,7 +24,7 @@
             @foreach (var d in Model)
             {
                 <div class="card" style="">
-                    <img class="card-img-top" src="images/bg.PNG" alt="Card image cap">
+                    <div class="activityHeader"><br /></div>
                     <div class="card-body">
                         <h5 class="card-title">@d.EventName</h5>
                         <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
@@ -35,7 +35,7 @@
 
 
                 </div>
-                <br>
+                <br><br>
             }
 
 

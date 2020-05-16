@@ -61,12 +61,12 @@
                         @foreach (var d in Model.Activities)
                         {
                             <div class="card" style="">
-                                <img class="card-img-top" src="images/bg.PNG" alt="Card image cap">
+                                <div class="activityHeader"><br /></div>
                                 <div class="card-body">
                                     <h5 class="card-title">@d.EventName</h5>
                                     <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
                                     <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Home", new {id = d.ActivityId})'" />
-                                    <a href="#" class="btn btn-primary">Favorite</a>
+                                    
                                     <div class="float-right">Reviews - Rating</div>
                                 </div>
                             </div>
