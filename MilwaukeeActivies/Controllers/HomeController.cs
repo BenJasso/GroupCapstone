@@ -86,6 +86,11 @@ namespace MilwaukeeActivies.Controllers
             }
         }
 
+        public IActionResult Landingpage()
+        {
+            return View();
+        }
+
 
         public async Task<IActionResult> ActivityDetails(int id)
         {

@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MilwaukeeActivies</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/cyborg.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body {
+            background-image: url("/images/LandingPage.jpg");
+            background-size:cover;
+        }
+        .custombutton {
+            background-color:transparent;
+            color: black;
+            border: 2px solid;
+            border-color:lightgray;
+            font-size: 20px;
+            border-radius: 12px;
+        }
+            .custombutton:hover {
+                background-color: #555555;
+                color: white;
+                box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+            }
+
+       
+    </style>
+</head>
+<body>
+ 
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

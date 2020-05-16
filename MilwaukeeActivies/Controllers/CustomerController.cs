@@ -29,11 +29,33 @@ namespace MilwaukeeActivies.Controllers
             _context = context;
         }
 
-        public ActionResult InterestProcess()
+        public async Task<IActionResult> InterestProcess()
         {
+            List<ActivityType> AllInterests = new List<ActivityType>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/ActivityTypes");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var details = await response.Content.ReadAsAsync<IEnumerable<ActivityType>>();
+                    var ActivitiesList = details.ToList();
+                    AllInterests = ActivitiesList;
+
+                    
+                }
+                else
+                {
+                   
+                }
+            }
             var model = new InterestModel
             {
-                AvailableInterestTypes = getInterestTypes()
+                AvailableInterestTypes = getInterestTypes(AllInterests)
             };
             return View(model);
         }
@@ -88,18 +110,17 @@ namespace MilwaukeeActivies.Controllers
 
         }
 
-        private IList<SelectListItem> getInterestTypes()
+        private IList<SelectListItem> getInterestTypes(List<ActivityType> Interests)
         {
-            return new List<SelectListItem>
+            List<SelectListItem> listOfInterests = new List<SelectListItem>();
             {
-                new SelectListItem {Text = "Basketball", Value = "Basketball"},
-                 new SelectListItem {Text = "Baseball", Value = "Baseball"},
-                  new SelectListItem {Text = "Running", Value = "Running"},
-                   new SelectListItem {Text = "Walking", Value = "Walking"},
-                    new SelectListItem {Text = "Biking", Value = "Biking"},
-                     new SelectListItem {Text = "Night Activities", Value = "Night Activities"},
-                      new SelectListItem {Text = "Water", Value = "Water"}
+                foreach(var item in Interests)
+                {
+                    listOfInterests.Add(new SelectListItem { Text = item.ActivityTypes, Value = item.ActivityTypes });
+                }
+                
             };
+            return listOfInterests;
         }
 
         public ActionResult CreateActivity()
@@ -484,45 +505,55 @@ namespace MilwaukeeActivies.Controllers
 
         public async Task<IActionResult> Index()
         {
+            List<Activities> TotalfilteredActivities = new List<Activities>();
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            ViewBag.UserId = usercurrent.CustomerID;
-            using (var client = new HttpClient())
+            if (_context.Customers.Where(e => e.IdentityUserId == userId).SingleOrDefault() == null)
             {
-                client.BaseAddress = new Uri("http://localhost:44386/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                ViewBag.country = "";
-                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+                return View("Create");
+            }
+            else
+            {
 
-                if (response.IsSuccessStatusCode)
+                ViewBag.UserId = usercurrent.CustomerID;
+                using (var client = new HttpClient())
                 {
+                    client.BaseAddress = new Uri("http://localhost:44386/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    ViewBag.country = "";
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
 
-                    var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
-
-                    List<Activities> allActivities = details.ToList();
-                    List<Interest> customerInterests = _context.Interests.Where(i => i.CustomerID == usercurrent.CustomerID).ToList();
-                    List<Activities> filteredActivities = new List<Activities>();
-                    foreach (var item in customerInterests)
+                    if (response.IsSuccessStatusCode)
                     {
-                        List<Activities> temp = new List<Activities>();
-                        temp = allActivities.Where(a => a.ActivityTypes == item.ActivityType).ToList();
-                        foreach(var item2 in temp)
+
+                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+
+                        List<Activities> allActivities = details.ToList();
+                        List<Interest> customerInterests = _context.Interests.Where(i => i.CustomerID == usercurrent.CustomerID).ToList();
+                        List<Activities> filteredActivities = new List<Activities>();
+                        foreach (var item in customerInterests)
                         {
-                            filteredActivities.Add(item2);
+                            List<Activities> temp = new List<Activities>();
+                            temp = allActivities.Where(a => a.ActivityTypes == item.ActivityType).ToList();
+                            foreach (var item2 in temp)
+                            {
+                                filteredActivities.Add(item2);
+                            }
+
                         }
 
+
+                        TotalfilteredActivities = filteredActivities;
+                        
                     }
-
-
-                
-                    return View(filteredActivities);
-                }
-                else
-                {
-                    return View();
+                    else
+                    {
+                        return View();
+                    }
                 }
             }
+            return View(TotalfilteredActivities);
         }
 
 
