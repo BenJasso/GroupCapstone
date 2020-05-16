@@ -43,8 +43,8 @@ namespace ActivitiesAPI.Controllers
             return View();
         }
 
-        // POST: Activities/Create
-        [HttpPost]
+        //POST: Activities/Create
+       [HttpPost]
 
         public IActionResult Create(Activity collection)
 
@@ -75,6 +75,8 @@ namespace ActivitiesAPI.Controllers
                 return View("index");
             }
         }
+
+
 
         // GET: Activities/Edit/5
         public ActionResult Edit(int id)
