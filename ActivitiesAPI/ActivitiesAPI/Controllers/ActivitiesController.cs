@@ -76,6 +76,30 @@ namespace ActivitiesAPI.Controllers
             }
         }
 
+        //[HttpPost]
+        //public IActionResult Create(List<Activity> collection)
+        //{
+        //    foreach (var item in collection)
+        //    {
+        //        Activity fresh = new Activity();
+        //        fresh.ActivityTypes = item.ActivityTypes;
+        //        fresh.Address = item.Address;
+        //        fresh.Price = item.Price;
+        //        fresh.Date = item.Date;
+        //        fresh.EventName = item.EventName;
+        //        fresh.Company = item.Company;
+        //        fresh.SiteURL = item.SiteURL;
+        //        fresh.Season = item.Season;
+        //        fresh.ZipCode = item.ZipCode;
+        //        fresh.Indoor = item.Indoor;
+        //        fresh.Description = item.Description;
+        //        fresh.CityName = item.CityName;
+        //        _repo.Activities.CreateActivity(fresh);
+        //        _repo.Save();
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
+
         // GET: Activities/Edit/5
         public ActionResult Edit(int id)
         {
