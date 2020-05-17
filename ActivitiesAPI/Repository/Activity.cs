@@ -20,6 +20,7 @@ namespace Repository
         public List<Review> Reviews { get; set; }
         public int ZipCode { get; set; }
         public string Address { get; set; }
+       
         public bool Indoor { get; set; }
         [ForeignKey("ActivityTypes")]
         public string ActivityTypes { get; set; }

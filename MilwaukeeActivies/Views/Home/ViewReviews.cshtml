@@ -3,7 +3,7 @@
 @{
     var ActivityId = ViewBag.ActivityId;
     ViewData["Title"] = "ViewReviews";
-    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>ViewReviews</h1>
@@ -44,6 +44,6 @@
    
 </div>
 <div>
-    @Html.ActionLink("CreateReview", "CreateReview", new { activityId = ActivityId}) |
+   
     <a asp-action="Index">Back to List</a>
 </div>

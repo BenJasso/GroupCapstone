@@ -61,22 +61,48 @@ namespace MilwaukeeActivies.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InterestProcess(InterestModel model)
+        public IActionResult InterestProcess(InterestModel model)
         {
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var usercurrent = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            List<string> listOfInterestTypes = model.SelectedInterests.ToList();
-            foreach(string item in listOfInterestTypes)
+            if (_context.Interests.Where(c=> c.CustomerID == usercurrent.CustomerID) == null)
             {
-                var SelectedInterest = new Interest()
+
+
+                List<string> listOfInterestTypes = model.SelectedInterests.ToList();
+                foreach (string item in listOfInterestTypes)
                 {
-                    ActivityType = item,
-                    CustomerID = usercurrent.CustomerID
-                };
-                _context.Interests.Add(SelectedInterest);
-                _context.SaveChanges();
+                    var SelectedInterest = new Interest()
+                    {
+                        ActivityType = item,
+                        CustomerID = usercurrent.CustomerID
+                    };
+                    _context.Interests.Add(SelectedInterest);
+                    _context.SaveChanges();
+                }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                var customersInterests = _context.Interests.Where(c => c.CustomerID == usercurrent.CustomerID);
+                foreach(var item in customersInterests)
+                {
+                    _context.Interests.Remove(item);
+                }
+                List<string> listOfInterestTypes = model.SelectedInterests.ToList();
+                foreach (string item in listOfInterestTypes)
+                {
+                    var SelectedInterest = new Interest()
+                    {
+                        ActivityType = item,
+                        CustomerID = usercurrent.CustomerID
+                    };
+                    _context.Interests.Add(SelectedInterest);
+                    _context.SaveChanges();
+                }
+                return RedirectToAction(nameof(Index));
+            }
         }
         public async Task<IActionResult> ActivityDetails(int id)
         {
@@ -123,8 +149,37 @@ namespace MilwaukeeActivies.Controllers
             return listOfInterests;
         }
 
-        public ActionResult CreateActivity()
+        public async Task<IActionResult> CreateActivity()
         {
+            List<SelectListItem> selectListActivityTypes = new List<SelectListItem>();
+            List<ActivityType> activityTypesList = new List<ActivityType>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/ActivityTypes");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var details = await response.Content.ReadAsAsync<IEnumerable<ActivityType>>();
+                    activityTypesList = details.ToList();
+                        foreach(var item in activityTypesList)
+                        {
+                        selectListActivityTypes.Add(new SelectListItem { Text = item.ActivityTypes, Value = item.ActivityTypes });     
+                        }
+                   
+                    
+
+
+                }
+                else
+                {
+
+                }
+            }
+            ViewBag.SelectListItems = new SelectList(selectListActivityTypes,"Value", "Text" );
             return View();
         }
 
@@ -141,7 +196,7 @@ namespace MilwaukeeActivies.Controllers
                 using (var response = await httpClient.PostAsync("https://localhost:44386/api/activities", content)) ;
               
             }
-            return View(); 
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> GetAllActivities()
@@ -244,6 +299,30 @@ namespace MilwaukeeActivies.Controllers
             }
         }
 
+//         using (var client = new HttpClient())
+//                {
+//                    client.BaseAddress = new Uri("http://localhost:44386/");
+//    client.DefaultRequestHeaders.Accept.Clear();
+//                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+//                    ViewBag.country = "";
+//                    HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/activities");
+
+//                    if (response.IsSuccessStatusCode)
+//                    {
+//                        var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
+//    HomeActivityViewModel homeActivity = new HomeActivityViewModel();
+//    homeActivity.Activities = details.ToList();
+//                       
+
+//                        return View(homeActivity);
+//}
+//                    else
+//                    {
+//                        return View();
+
+//                    }
+//                }
+
         public IActionResult CreateReview(int activityId)
         {
             ViewBag.ActivityId = activityId;
@@ -285,6 +364,7 @@ namespace MilwaukeeActivies.Controllers
 
         public async Task<IActionResult> ViewReviews(int activityId)
         {
+            ViewBag.ActivityId = activityId;
             List<Review> activityReviews = new List<Review>();
             using (var client = new HttpClient())
             {

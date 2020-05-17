@@ -8,7 +8,7 @@ namespace MilwaukeeActivies.Models
     public class HomeActivityViewModel
     {
 
-       public IEnumerable<Activities> Activities { get; set; }
+       public List<Activities> Activities { get; set; }
 
        public double MinBudget { get; set; }
        public double MaxBudget { get; set; }

@@ -23,7 +23,7 @@ namespace MilwaukeeActivies.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> AllActivities()
         { 
                 using (var client = new HttpClient())
                 {
@@ -38,8 +38,7 @@ namespace MilwaukeeActivies.Controllers
                         var details = await response.Content.ReadAsAsync<IEnumerable<Activities>>();
                         HomeActivityViewModel homeActivity = new HomeActivityViewModel();
                         homeActivity.Activities = details.ToList();
-                        //var ActivitiesList = details.ToList();
-                        //var Activity1 = ActivitiesList[0];
+                        
 
                         return View(homeActivity);
                     }
@@ -51,7 +50,7 @@ namespace MilwaukeeActivies.Controllers
                 }
         }
         [HttpPost]
-        public async Task<IActionResult> Index(HomeActivityViewModel home)
+        public async Task<IActionResult> AllActivities(HomeActivityViewModel home)
         {
 
 
@@ -84,6 +83,11 @@ namespace MilwaukeeActivies.Controllers
 
                 }
             }
+        }
+
+        public IActionResult Index()
+        {
+            return View();
         }
 
         public IActionResult Landingpage()
@@ -122,6 +126,46 @@ namespace MilwaukeeActivies.Controllers
                 }
             }
 
+        }
+
+        public async Task<IActionResult> ViewReviews(int activityId)
+        {
+            ViewBag.ActivityId = activityId;
+            List<Review> activityReviews = new List<Review>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44386/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ViewBag.country = "";
+                HttpResponseMessage response = await client.GetAsync("https://localhost:44386/api/reviews");
+
+                if (response.IsSuccessStatusCode)
+                {
+
+
+
+                    var details = await response.Content.ReadAsAsync<IEnumerable<Review>>();
+                    foreach (Review item in details)
+                    {
+                        if (item.ActivityId == activityId)
+                        {
+                            activityReviews.Add(item);
+                        }
+
+                    }
+
+
+                    return View(activityReviews);
+
+
+                }
+                else
+                {
+                    return View();
+
+                }
+            }
         }
 
         public IActionResult Privacy()

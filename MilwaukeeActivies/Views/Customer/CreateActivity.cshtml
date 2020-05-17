@@ -1,13 +1,14 @@
 ﻿@model MilwaukeeActivies.Models.Activities
 
 @{
+    var activityTypesList = ViewBag.SelectListItems;
     ViewData["Title"] = "CreateActivity";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h1>CreateActivity</h1>
+<h1 style="text-shadow:1px 1px 2px #000000">Create An Activity</h1>
 
-<h4>Activities</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,61 +16,61 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
            
             <div class="form-group">
-                <label asp-for="CityName" class="control-label"></label>
+                <label style="color:darkgrey" asp-for="CityName" class="control-label"></label>
                 <input asp-for="CityName" class="form-control" />
                 <span asp-validation-for="CityName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="EventName" class="control-label"></label>
                 <input asp-for="EventName" class="form-control" />
                 <span asp-validation-for="EventName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="Company" class="control-label"></label>
                 <input asp-for="Company" class="form-control" />
                 <span asp-validation-for="Company" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="SiteURL" class="control-label"></label>
                 <input asp-for="SiteURL" class="form-control" />
                 <span asp-validation-for="SiteURL" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="Season" class="control-label"></label>
                 <input asp-for="Season" class="form-control" />
                 <span asp-validation-for="Season" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="ZipCode" class="control-label"></label>
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            <div style="color:darkgrey" class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Indoor" /> @Html.DisplayNameFor(model => model.Indoor)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="ActivityTypes" class="control-label"></label>
-                <input asp-for="ActivityTypes" class="form-control" />
-                <span asp-validation-for="ActivityTypes" class="text-danger"></span>
+            <div style="color:darkgrey" class="form-group">
+                <label asp-for="ActivityTypes" class="control-label">Activity Type</label>
+                @Html.DropDownListFor(model => model.ActivityTypes, activityTypesList as SelectList, new { @class = "form-control" })
+                
             </div>
-            <div class="form-group">
+            <div style="color:darkgrey" class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>

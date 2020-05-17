@@ -4,34 +4,34 @@
     ViewData["Title"] = "SelectInterests";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
-
-<h1>SelectInterests</h1>
-
-
-
     
-    <body>
-        <div class="container">
-            @using (Html.BeginForm("InterestProcess", "Customer"))
-            {
-                foreach (var item in Model.AvailableInterestTypes)
+        <h1 style="text-align:center; text-shadow:2px 2px 4px #000000; top:">Select Interests</h1>
+
+
+
+
+        <body>
+            <div style="text-align:center" class="container">
+                @using (Html.BeginForm("InterestProcess", "Customer"))
                 {
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"
-                                   name="SelectedInterests"
-                                   value="@item.Value"
-                                   @if (Model.SelectedInterests.Contains(item.Value)) { <text> checked </text>  } /> @item.Text
-                            </label>
+                    foreach (var item in Model.AvailableInterestTypes)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       name="SelectedInterests"
+                                       value="@item.Value"
+                                       @if (Model.SelectedInterests.Contains(item.Value)) { <text> checked </text> } /> @item.Text
+                                </label>
+                            </div>
+                        }
+                        <div class="form-group text-center">
+                            <input type="submit" class="btn btn-primary" value="Submit" />
                         </div>
                     }
-                    <div class="form-group text-center">
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                    </div>
-                }
-        </div>
-    </body>
-
+            </div>
+        </body>
+    
 
 
 
