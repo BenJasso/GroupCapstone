@@ -25,5 +25,8 @@ namespace Repository
         [ForeignKey("ActivityTypes")]
         public string ActivityTypes { get; set; }
         public string Description { get; set; }
+
+        public double Lat { get; set; }
+        public double Long { get; set; }
     }
 }

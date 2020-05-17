@@ -10,8 +10,8 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200515192555_testing-for-activitiestypes")]
-    partial class testingforactivitiestypes
+    [Migration("20200517153411_added-lat-long")]
+    partial class addedlatlong
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,14 +28,14 @@ namespace Repository.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ActivityTypeId")
+                    b.Property<string>("ActivityTypes")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Company")
                         .HasColumnType("nvarchar(max)");
@@ -51,6 +51,12 @@ namespace Repository.Migrations
 
                     b.Property<bool>("Indoor")
                         .HasColumnType("bit");
+
+                    b.Property<float>("Lat")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Long")
+                        .HasColumnType("real");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");

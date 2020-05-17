@@ -2,7 +2,7 @@
 
 namespace Repository.Migrations
 {
-    public partial class defaultmigration : Migration
+    public partial class addedlatlong : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

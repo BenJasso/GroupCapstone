@@ -10,8 +10,8 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200515211126_changed foreign keys on activities model")]
-    partial class changedforeignkeysonactivitiesmodel
+    [Migration("20200517151327_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,8 +34,8 @@ namespace Repository.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CityName")
-                        .HasColumnType("int");
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Company")
                         .HasColumnType("nvarchar(max)");
@@ -51,6 +51,12 @@ namespace Repository.Migrations
 
                     b.Property<bool>("Indoor")
                         .HasColumnType("bit");
+
+                    b.Property<float>("Lat")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Long")
+                        .HasColumnType("real");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");

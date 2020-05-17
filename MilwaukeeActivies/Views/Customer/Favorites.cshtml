@@ -21,7 +21,8 @@
                     <br />
                     
                     <div class="card-body">
-                        <h5 class="card-title">@d.EventName</h5>
+                        
+                        <h5 class="card-title activityHeader">@d.EventName</h5>
                         <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
                         <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'" />
                         <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("RemoveFavorite", "Customer" , new { id = d.ActivityId, userID = currentUserId})'">Remove Favorite</a>

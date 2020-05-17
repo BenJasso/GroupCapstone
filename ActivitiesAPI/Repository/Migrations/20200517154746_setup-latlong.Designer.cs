@@ -10,8 +10,8 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200511201736_defaultmigration")]
-    partial class defaultmigration
+    [Migration("20200517154746_setup-latlong")]
+    partial class setuplatlong
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,14 +28,14 @@ namespace Repository.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ActivityTypeId")
+                    b.Property<string>("ActivityTypes")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Company")
                         .HasColumnType("nvarchar(max)");
@@ -43,11 +43,20 @@ namespace Repository.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EventName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Indoor")
                         .HasColumnType("bit");
+
+                    b.Property<double>("Lat")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Long")
+                        .HasColumnType("float");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");

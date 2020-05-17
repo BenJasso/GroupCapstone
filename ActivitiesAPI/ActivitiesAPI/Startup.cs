@@ -14,14 +14,18 @@ using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Contracts;
 using Repository.Data;
+using System.Web.Http;
 
 namespace ActivitiesAPI
 {
     public class Startup
     {
+
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -32,12 +36,20 @@ namespace ActivitiesAPI
             services.AddDbContext<ApplicationDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddControllers();
+            services.AddCors(); //added for cross origin error
             //services.AddControllersWithViews(); //added from recieving an error
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseCors(builder => builder //added for crossorigin error
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
