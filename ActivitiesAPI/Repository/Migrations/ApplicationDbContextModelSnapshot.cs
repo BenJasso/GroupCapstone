@@ -50,6 +50,12 @@ namespace Repository.Migrations
                     b.Property<bool>("Indoor")
                         .HasColumnType("bit");
 
+                    b.Property<double>("Lat")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Long")
+                        .HasColumnType("float");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 

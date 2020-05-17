@@ -1,0 +1,71 @@
+INSERT INTO Activities (Lat, Long)
+VALUES (value1, value2, value3, ...);
+
+
+KK+River+Trail+-+Maple+St/@ 43.0110774 , -87.9114613
+
+Milwaukee+Rotary+Centennial+Arboretum/@ 43.0674005 , -87.8945655
+
+Milwaukee+River+Greenway/@ 43.0976057 , -87.9081123
+
+Lake+Park/@ 43.0688641 , -87.8727077
+
+Three+Bridges+Park/@ 43.0259257 , -87.9551482
+
+Havenwoods+State+Forest/@ 43.1273455 , -87.9756831
+
+Milwaukee Marathon,+WI+53215/@ 43.1273455 , -87.9756831
+
+Veterans+Park,+Milwaukee,+WI/@ 43.0553577 , -87.9167035
+
+Mitchell+Park+Horticultural+Conservatory/@ 43.0264365 , -87.9481369
+
+SITE+1A/@ 43.033501 , -87.9101917
+
+Bugsy's+Back+Alley+Speakeasy/@ 43.0328959 , -87.9110237
+
+Bad+Genie/@ 43.0409495 , -87.9078959
+
+Milwaukee+Ale+House/@ 43.0334278 , -87.9114915
+
+The+Wicked+Hop/@ 43.0348282 , -87.9097662
+
+Sobelman's/@ 43.0348242 , -87.9250871
+
+Barnacle+Bud's/@ 43.0097222 , -87.9077443
+
+Bryant's+Cocktail+Lounge/@ 43.0143278 , -87.9250581
+
+Milwaukee Brewers/@ 43.0279776 , -87.9733391
+
+Milwaukee Bucks/@ 43.0450802 , -87.9195749
+
+Milwaukee+Admirals+Professional+Hockey/@ 43.0418447 , -87.9200254
+
+Milwaukee+Wave+Professional+Indoor+Soccer/@ 43.0417201 , -87.9188526
+
+Basilica+of+Saint+Josaphat/@ 43.0026583 , -87.921672
+
+Pabst+Mansion/@ 43.0392582 , -87.9401497
+
+Historic+Third+Ward/@ 43.0304352 , -87.9111208
+
+North+Point+Lighthouse/@ 43.0656722 , -87.8736109
+
+Milwaukee+Art+Museum/@ 43.0400726 , -87.8992467
+
+Milwaukee+Public+Museum/@ 43.0406582 , -87.9230318
+
+Harley-Davidson+Museum/@ 43.0316706 , -87.9187131
+
+Milwaukee+County+Zoo/@ 43.0312884 , -88.043144
+
+Miller Brewery/@ 43.0421238 , -87.9700399
+
+MobCraft/@ 43.0261648 , -87.9192206
+
+Third+Space+Brewing/@ 43.0345331 , -87.9347331
+
+Milwaukee+Brewing+Company/@ 43.0447736 , -87.9247018
+
+Lakefront+Brewery/@ 43.0547262 , -87.9074762
