@@ -3,10 +3,10 @@
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
 }
 
-<div >
+<div>
     <div class="text-center">
         <h1 style="text-shadow:1px 1px 2px #000000" class="display-4">Welcome to Milwaukee Activities!</h1>
         <br />
@@ -22,151 +22,140 @@
 
     <div style="text-align:center">
         <h3 style="text-shadow:1px 1px 2px #000000; color:slategray">Filter Activities</h3>
-        
-            <form asp-action="AllActivities">
-                <table>
-                    <tr>
-                        <td>
-                            <label asp-for="@Model.MinBudget"></label>
-                            <input asp-for="@Model.MinBudget" value="0" class="form-control"></input>
-                        </td>
-                        <td>
-                            <label asp-for="@Model.MaxBudget"></label>
-                            <input asp-for="@Model.MaxBudget" value="200" class="form-control"></input>
-                        </td>
-                        <td>
-                            <label asp-for="@Model.dateStart"></label>
-                            <input asp-for="@Model.dateStart" value="@DateTime.Now.ToString("s")" class="form-control"></input>
-                        </td>
-                        <td>
-                            <label asp-for="@Model.dateEnd"></label>
-                            <input asp-for="@Model.dateEnd" value="@DateTime.MaxValue.ToString("s")" class="form-control"></input>
-                        </td>
-                    </tr>
-                </table>
 
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </form>
-      
+        <form asp-action="AllActivities">
+            <table>
+                <tr>
+                    <td>
+                        <label asp-for="@Model.MinBudget"></label>
+                        <input asp-for="@Model.MinBudget" value="0" class="form-control"></input>
+                    </td>
+                    <td>
+                        <label asp-for="@Model.MaxBudget"></label>
+                        <input asp-for="@Model.MaxBudget" value="200" class="form-control"></input>
+                    </td>
+                    <td>
+                        <label asp-for="@Model.dateStart"></label>
+                        <input asp-for="@Model.dateStart" value="@DateTime.Now.ToString("s")" class="form-control"></input>
+                    </td>
+                    <td>
+                        <label asp-for="@Model.dateEnd"></label>
+                        <input asp-for="@Model.dateEnd" value="@DateTime.MaxValue.ToString("s")" class="form-control"></input>
+                    </td>
+                </tr>
+            </table>
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
 
     </div>
-       
-            <div class="container" style="margin-top: 30px">
 
-                <div class="row">
+    <div class="container" style="margin-top: 30px">
 
-                    <div class="col-sm-1"></div>
-                    <div class="col-md-10">
+        <div class="row">
 
-
-                        @foreach (var d in Model.Activities)
-                        {
-                            <div class="card" style="">
-                                <div class="activityHeader"><br /></div>
-                                <div class="card-body">
-                                    <h5 class="card-title">@d.EventName</h5>
-                                    <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
-                                    <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Home", new {id = d.ActivityId})'" />
-                                    <a href="#" class="btn btn-primary">Favorite</a>
-                                    <a href="#" class="btn btn-primary, float-right" onclick="location.href='@Url.Action("ViewReviews", "Home" , new { activityId = d.ActivityId})'">View Reviews</a>
-                                </div>
-                            </div>
-
-                            <br>
-                        }
+            <div class="col-sm-1"></div>
+            <div class="col-md-10">
 
 
+                @foreach (var d in Model.Activities)
+                {
+                    <div class="card" style="">
+                        <div class="activityHeader"><br /></div>
+                        <div class="card-body">
+                            <h5 class="card-title">@d.EventName</h5>
+                            <p class="card-text"> @d.Description </p>
+                            <p>@d.Company - At @d.Address - Cost: $@d.Price - Date: @d.Date</p>
+                            <a href="#" class="btn btn-primary" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Home", new {id = d.ActivityId})'">View Activity</a>
+
+                            <a href="#" class="btn btn-primary, float-right" onclick="location.href='@Url.Action("ViewReviews", "Home" , new { activityId = d.ActivityId})'">View Reviews</a>
+                        </div>
                     </div>
-                    <div class="col-sm-1"></div>
 
-
-                </div>
-            </div>
-
-     
-
-    </div>
-
-    <script>
-        function initAutocomplete() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 43.0389, lng: -87.9065 },
-                zoom: 13,
-                mapTypeId: 'roadmap'
-            });
-
-            var input = document.getElementById('pac-input');
-            var searchBox = new google.maps.places.SearchBox(input);
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-            map.addListener('bounds_changed', function () {
-                searchBox.setBounds(map.getBounds());
-            });
-
-            var brewers = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(43.0280, -87.9733)
-            });
-            brewers.customInfo = "Milwaukee Brewers / Miller Park";
-
-            var bucks = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(43.0444, -87.9176)
-            });
-            bucks.customInfo = "Milwaukee Bucks / Fiserv Forum";
-
-            google.maps.event.addListener(brewers, 'click', function () {
-                alert(this.customInfo);
-            });
-
-            google.maps.event.addListener(bucks, 'click', function () {
-                alert(this.customInfo);
-            });
-
-            var markers = [];
-            searchBox.addListener('places_changed', function () {
-                var places = searchBox.getPlaces();
-
-                if (places.length == 0) {
-                    return;
+                    <br>
                 }
 
-                markers.forEach(function (marker) {
-                    marker.setMap(null);
-                });
-                markers = [];
 
-                var bounds = new google.maps.LatLngBounds();
-                places.forEach(function (place) {
-                    if (!place.geometry) {
-                        console.log("Returned place contains no geometry");
-                        return;
-                    }
-                    var icon = {
-                        url: place.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
+            </div>
+            <div class="col-sm-1"></div>
 
-                    markers.push(new google.maps.Marker({
-                        map: map,
-                        icon: icon,
-                        title: place.name,
-                        position: place.geometry.location
-                    }));
 
-                    if (place.geometry.viewport) {
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                map.fitBounds(bounds);
+        </div>
+    </div>
+
+
+
+</div>
+
+<script>
+    function initAutocomplete() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 43.0389, lng: -87.9065 },
+            zoom: 13,
+            mapTypeId: 'roadmap'
+        });
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        map.addListener('bounds_changed', function () {
+            searchBox.setBounds(map.getBounds());
+        });
+        var brewers = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(43.0280, -87.9733)
+        });
+        brewers.customInfo = "Milwaukee Brewers / Miller Park";
+        var bucks = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(43.0444, -87.9176)
+        });
+        bucks.customInfo = "Milwaukee Bucks / Fiserv Forum";
+        google.maps.event.addListener(brewers, 'click', function () {
+            alert(this.customInfo);
+        });
+        google.maps.event.addListener(bucks, 'click', function () {
+            alert(this.customInfo);
+        });
+        var markers = [];
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) {
+                return;
+            }
+            markers.forEach(function (marker) {
+                marker.setMap(null);
             });
-        }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGo1Cx5-3NVQ1v599tNS2j3BVgXZtSNa0&libraries=places&callback=initAutocomplete"
-            async defer>
-    </script>
+            markers = [];
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function (place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+                var icon = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+                markers.push(new google.maps.Marker({
+                    map: map,
+                    icon: icon,
+                    title: place.name,
+                    position: place.geometry.location
+                }));
+                if (place.geometry.viewport) {
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGo1Cx5-3NVQ1v599tNS2j3BVgXZtSNa0&libraries=places&callback=initAutocomplete"
+        async defer>
+</script>

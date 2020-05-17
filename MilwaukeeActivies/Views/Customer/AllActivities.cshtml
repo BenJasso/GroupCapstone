@@ -64,20 +64,21 @@
 
                         @foreach (var d in Model.Activities)
                         {
-                            <div class="card" style="">
-                                <div class="activityHeader"><br /></div>
-                                <div class="card-body">
-                                    <h5 class="card-title">@d.EventName</h5>
-                                    <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
-                                    <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'" />
-                                    <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("AddFavorites", "Customer" , new { id = ViewBag.UserId, activityId = d.ActivityId})'">Favorite</a>
-                                    <a href="#" class="btn btn-primary, float-right" onclick="location.href='@Url.Action("ViewReviews", "Customer" , new { activityId = d.ActivityId})'">View Reviews</a>
-                                    
+                        <div class="card" style="">
+                            <div class="activityHeader"><br /></div>
+                            <div class="card-body">
+                                <h5 class="card-title">@d.EventName</h5>
+                                <p class="card-text"> @d.Description </p>
+                                <p>@d.Company - At @d.Address - Cost: $@d.Price - Date: @d.Date</p>
+                                <a href="#" class="btn btn-primary" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'">View Activity</a>
+                                <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("AddFavorites", "Customer" , new { id = ViewBag.UserId, activityId = d.ActivityId})'">Favorite</a>
+                                <a href="#" class="btn btn-primary float-right" onclick="location.href='@Url.Action("ViewReviews", "Customer" , new { activityId = d.ActivityId})'">View Reviews</a>
 
-                                </div>
 
-                                
                             </div>
+
+
+                        </div>
                             <br>
                         }
 
