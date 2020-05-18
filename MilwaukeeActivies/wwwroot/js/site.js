@@ -107,6 +107,7 @@
                 for (let i = 0; i < data.length; i++) {
                     var brewers = new google.maps.Marker({
                         map: map,
+                        title: data[i].company,
                         position: new google.maps.LatLng(data[i].lat, data[i].long)
                         });
 
