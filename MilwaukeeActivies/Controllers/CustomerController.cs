@@ -625,7 +625,7 @@ namespace MilwaukeeActivies.Controllers
 
 
                         TotalfilteredActivities = filteredActivities;
-                        
+
                     }
                     else
                     {
@@ -639,7 +639,7 @@ namespace MilwaukeeActivies.Controllers
 
 
 
-        
+
         public async Task<IActionResult> RemoveFavorite(int id, int userID)
         {
             var favorite = _context.Favorites.Where(f => f.CustomerID == userID && f.ActivityID == id).SingleOrDefault();

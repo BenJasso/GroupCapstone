@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h3>Your Favorites</h3>
+<h1 style="text-shadow:1px 1px 2px #000000; text-align:center">Your Favorites</h1>
 
 <div class="container" style="margin-top:30px">
     <div class="row">
@@ -17,23 +17,25 @@
 
             @foreach (var d in Model)
             {
-                <div class="card" style="">
-                    <br />
-                    
+            <div class="card" style="">
+                
+                <div class="activityHeader"><br /></div>
                     <div class="card-body">
-                        
-                        <h5 class="card-title activityHeader">@d.EventName</h5>
-                        <p class="card-text"> @d.Description @d.Company -  At @d.Address Cost: @d.Price Date: @d.Date</p>
-                        <input type="button" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'" />
+
+                        <h5 class="card-title">@d.EventName</h5>
+                        <p class="card-text"> @d.Description </p>
+                        <p>@d.Company - At @d.Address<br></p> <p>Cost: $@d.Price<br></p><p>Date: @d.Date</p>
+                        <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'">View</a>
                         <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("RemoveFavorite", "Customer" , new { id = d.ActivityId, userID = currentUserId})'">Remove Favorite</a>
-                        <a href="#" class="btn btn-primary, float-right" onclick="location.href='@Url.Action("ViewReviews", "Customer" , new { activityId = d.ActivityId})'">View Reviews</a>
+                        <a href="#" class="btn btn-primary float-right" onclick="location.href='@Url.Action("ViewReviews", "Customer" , new { activityId = d.ActivityId})'">View Reviews</a>
                     </div>
 
-                    <br>
-                </div>
+
+            </div>
+                <br>
             }
 
-
+            <a asp-action="Index">Back to List</a>
             <div class="col-sm-1"></div>
 
 

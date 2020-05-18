@@ -23,20 +23,22 @@
 
             @foreach (var d in Model)
             {
-                <div class="card" style="">
-                    <div class="activityHeader"><h5 class="card-title">@d.EventName</h5></div>
-                    <div class="card-body">
-                        
-                        <p class="card-text"> @d.Description </p>
-                        <a href="#" class="btn btn-primary" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'" />
-                        <p>@d.Company  -  At @d.Address  -  Cost: $@d.Price  -  Date: @d.Date</p>
-         
-                        <a href="#" class="btn btn-primary, float-right" onclick="location.href='@Url.Action("ViewReviews", "Customer" , new { activityId = d.ActivityId})'">View Reviews</a>
-                    </div>
+            <div class="card" style="">
+                <div class="activityHeader"><br /></div>
+                <div class="card-body">
+                    <h5 class="card-title">@d.EventName</h5>
+                    <p class="card-text"> @d.Description </p>
+                    <p>@d.Company - At @d.Address<br></p> <p>Cost: $@d.Price<br></p><p>Date: @d.Date</p>
+                    <a href="#" class="btn btn-primary" value="View" onclick="location.href='@Url.Action("ActivityDetails", "Customer", new {id = d.ActivityId})'">View Activity</a>
+                    <a href="#" class="btn btn-primary" onclick="location.href='@Url.Action("AddFavorites", "Customer" , new { id = ViewBag.UserId, activityId = d.ActivityId})'">Favorite</a>
+                    <a href="#" class="btn btn-primary float-right" onclick="location.href='@Url.Action("ViewReviews", "Customer" , new { activityId = d.ActivityId})'">View Reviews</a>
 
 
                 </div>
-                <br><br>
+
+
+            </div>
+                <br>
             }
 
 
